@@ -1,24 +1,41 @@
-import React, { useEffect, useState } from 'react'
-import styled from 'styled-components'
-import { FormattedHTMLMessage } from 'react-intl'
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import { FormattedHTMLMessage } from 'react-intl';
+import ape from '../assets/sponsorsHN/ape.png';
+import chain from '../assets/sponsorsHN/chain.svg';
+import eth from '../assets/sponsorsHN/eth.png';
+import etherscan from '../assets/sponsorsHN/etherscan.png';
+import icp from '../assets/sponsorsHN/icp.png';
+import metalogo from '../assets/sponsorsHN/metalogo.svg';
+import scroll from '../assets/sponsorsHN/scroll.png';
 
-import ape from '../assets/sponsorsHN/ape.png'
-import chain from '../assets/sponsorsHN/chain.jpeg'
-import eth from '../assets/sponsorsHN/opt.svg'
-import etherscan from '../assets/sponsorsHN/OPESP.svg'
-import icp from '../assets/sponsorsHN/layer.png'
-import metalogo from '../assets/sponsorsHN/metalogo.svg'
-import scroll from '../assets/sponsorsHN/scroll.png'
+import { useLanguage } from '../context/LanguageContext';
 
-import { useLanguage } from '../context/LanguageContext'
+const useWindowWidth = () => {
+  const [width, setWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => setWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  return width;
+};
+
+const SponsorBox = ({ image, size }) => (
+  <BoxItem className={size}>
+    <BoxInfo>
+      <img src={image} alt="Sponsor Logo" />
+    </BoxInfo>
+  </BoxItem>
+);
 
 const SponsorsHN = () => {
-  const { locale } = useLanguage()
-  const [width, setWidth] = useState(window.innerWidth)
-  useEffect(() => {
-    window.addEventListener('resize', () => setWidth(window.innerWidth))
-  }, [])
-  const medium = 700
+  const { locale } = useLanguage();
+  const width = useWindowWidth();
 
   return (
     <SponsorsHNSection id="media" locale={locale}>
@@ -27,53 +44,29 @@ const SponsorsHN = () => {
           <FormattedHTMLMessage id="sponsors.title" />
         </h1>
         <Row>
-          <BoxItem className="tierOne">
-            <BoxInfo>
-              <img src={ape} width="150" />
-            </BoxInfo>
-          </BoxItem>
-          <BoxItem className="tierOne">
-            <BoxInfo>
-              <img src={chain} width="150" />
-            </BoxInfo>
-          </BoxItem>
-          <BoxItem className="tierOne">
-            <BoxInfo>
-              <img src={eth} height="100" />
-            </BoxInfo>
-          </BoxItem>
-          <BoxItem className="tierOne">
-            <BoxInfo>
-              <img src={icp} width="250" />
-            </BoxInfo>
-          </BoxItem>
-
-          <BoxItem className="tierOne">
-            <BoxInfo>
-              <img src={etherscan} height="70" />
-            </BoxInfo>
-          </BoxItem>
-          <BoxItem className="tierOne">
-            <BoxInfo>
-              <img src={scroll} height="90" />
-            </BoxInfo>
-          </BoxItem>
-          <BoxItem className="tierOne">
-            <BoxInfo>
-              <img src={metalogo} width="150" />
-            </BoxInfo>
-          </BoxItem>
+          {[
+            { image: ape, size: 'tierOne' },
+            { image: chain, size: 'tierOne' },
+            { image: eth, size: 'tierOne' },
+            { image: icp, size: 'tierTwo' },
+            { image: etherscan, size: 'tierTwo' },
+            { image: scroll, size: 'tierTwo' },
+            { image: metalogo, size: 'tierThree' },
+          ].map(({ image, size }, index) => (
+            <SponsorBox key={index} image={image} size={size} />
+          ))}
         </Row>
       </Container>
     </SponsorsHNSection>
-  )
-}
+  );
+};
 
 const SponsorsHNSection = styled.section`
   background: #0b0c0d;
   color: #4D4D4D;
   text-align: center;
   height: auto;
+
   h1 {
     font-family: 'Helvetica';
     font-weight: 400;
@@ -82,36 +75,27 @@ const SponsorsHNSection = styled.section`
     text-transform: uppercase;
     color: #faf7f5;
     position: relative;
+
     @media only screen and (max-width: 700px) {
-      font-size: ${props => (props.locale == 'pt' ? '40px' : '44px')};
+      font-size: ${props => (props.locale === 'pt' ? '40px' : '44px')};
       line-height: 45px;
       margin-bottom: 73px;
     }
   }
-  span.pixel {
-    font-family: 'Pixel';
-  }
-`
+`;
 
 const Row = styled.div`
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  outline: 1px solid #4D4D4D;
-  max-width: 1134px;
-  @media only screen and (max-width: 700px) {
-    max-width: 360px;
-    width: 360px;
-  }
-  @media only screen and (min-width: 701px) and (max-width: 1230px) {
-    max-width: 600px;
-    width: 600px;
-  }
-  margin-right: 0;
-  margin-left: auto;
-  margin-bottom: 1px;
+  justify-content: space-between;
   flex-wrap: wrap;
-`
+  max-width: 1134px;
+  margin: 0 auto;
+
+  @media only screen and (max-width: 700px) {
+    justify-content: center;
+  }
+`;
 
 const BoxInfo = styled.div`
   overflow: hidden;
@@ -119,7 +103,7 @@ const BoxInfo = styled.div`
   align-items: center;
   justify-content: center;
   height: 100%;
-`
+`;
 
 const BoxItem = styled.div`
   background: #0b0c0d;
@@ -128,52 +112,42 @@ const BoxItem = styled.div`
   margin: 0;
   text-align: center;
   outline: 1px solid #4D4D4D;
+
   img {
-    overflow: hidden;
-    max-width: 70%;
+    max-width: 100%;
   }
+
+  &.tierOne,
+  &.tierTwo,
+  &.tierThree {
+    height: 250px;
+    width: calc(33.33% - 20px);
+    margin-bottom: 20px;
+
+    @media only screen and (max-width: 700px) {
+      width: calc(100% - 20px);
+    }
+  }
+
   &.tierTwo {
     height: 180px;
-    width: 283.5px;
-    @media only screen and (max-width: 700px) {
-      width: 180px;
-    }
-    @media only screen and (min-width: 701px) and (max-width: 1230px) {
-      width: 300px;
-    }
+  }
 
-    .div {
-      height: 106px;
-      width: 279px;
-    }
+  &.tierThree {
+    height: 120px;
   }
-  &.tierOne {
-    height: 250px;
-    width: 378px;
-    @media only screen and (max-width: 700px) {
-      width: 360px;
-    }
-    @media only screen and (min-width: 701px) and (max-width: 1230px) {
-      width: 600px;
-    }
-    .div {
-      height: 290px;
-      width: 560px;
-    }
-  }
-`
+`;
 
 const Container = styled.div`
   max-width: 1440px;
-  padding: 0 40px 160px 40px;
-  @media only screen and (max-width: 700px) {
-    padding: 0 15px 80px 15px;
-  }
+  padding: 0 20px;
+
   @media only screen and (min-width: 1440px) {
     margin: 0 auto;
   }
+
   text-align: left;
   padding-bottom: 160px;
-`
+`;
 
-export default SponsorsHN
+export default SponsorsHN;
