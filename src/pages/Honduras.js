@@ -1,25 +1,26 @@
-import Navbar from "../sections/Navbar";
-import Hero from '../sections/Hero'
-import EthToLatam from '../sections/EthToLatam'
-import SpeakersHN from '../sections/SpeakersHN'
-import SponsorsHN from '../sections/SponsorsHN'
-import Venue from '../sections/Venue'
-import Footer from '../sections/Footer'
-import Loop from '../components/Loop'
-import loopHonduras from '../assets/carousel-honduras.png'
-import { PALETTE } from "../App";
-import Apply from "../sections/Apply";
-import date1 from "../assets/date1-honduras.svg"
-import date2 from "../assets/date2-honduras.svg"
-import venueSmSrc from '../assets/venue-honduras.png'
-import { Link } from "react-scroll";
-import { FormattedMessage } from "react-intl";
-import EDITIONS from "../editions";
+import React from 'react';
+import { Link } from 'react-scroll';
+import { FormattedMessage } from 'react-intl';
+import Navbar from '../sections/Navbar';
+import HackathonBanner from '../sections/HackatonBanner';
+import Hero from '../sections/Hero';
+import EthToLatam from '../sections/EthToLatam';
+import SpeakersHN from '../sections/SpeakersHN';
+import SponsorsHN from '../sections/SponsorsHN';
+import Venue from '../sections/Venue';
+import Footer from '../sections/Footer';
+import Loop from '../components/Loop';
+import Apply from '../sections/Apply';
+import date1 from '../assets/date1-honduras.svg';
+import date2 from '../assets/date2-honduras.svg';
+import venueSmSrc from '../assets/venue-honduras.png';
+import { PALETTE } from '../App';
+import EDITIONS from '../editions';
 
 function Honduras() {
     return (
         <div className="App">
-            <Navbar color={PALETTE.SKYBLUE} >
+            <Navbar color={PALETTE.SKYBLUE}>
                 <Link to="about" spy={true} smooth={true} offset={50} duration={500}>
                     <FormattedMessage id="navbar.about" />
                 </Link>
@@ -29,20 +30,21 @@ function Honduras() {
             </Navbar>
             <Hero color={PALETTE.SKYBLUE} colorButton={PALETTE.SKYBLUE} buttonSrc={"#"} loopSrc={loopHonduras} edition={EDITIONS.HONDURAS} />
             <Apply />
+            <HackathonBanner /> 
             <EthToLatam edition={EDITIONS.HONDURAS} />
             <Loop reverse content={<img src={date1} alt="smothing honduras" />} />
             <Loop content={<img src={date2} alt="smothing honduras" />} />
             <SpeakersHN />
             <SponsorsHN />
             <Venue
-                locationHref={"https://copantl.com/"}
+                locationHref={'https://copantl.com/'}
                 venueSmSrc={venueSmSrc}
                 venueLgSrc={venueSmSrc}
                 edition={EDITIONS.HONDURAS}
             />
             <Footer withoutImage={true} color={PALETTE.SKYBLUE} />
         </div>
-    )
+    );
 }
 
 export default Honduras;
